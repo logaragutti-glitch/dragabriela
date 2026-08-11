@@ -1,84 +1,85 @@
-# Primeiros passos — colocando o site no ar
+# Primeiros passos — colocando o site no ar (Vercel + Supabase)
 
-Boa notícia: como o sistema agora tem backend próprio, sumiram as etapas de Google Sheets e Make.com. Sobrou muito menos coisa pra fazer.
-
----
-
-## Etapa 1 — Rodar no seu computador (pra testar)
-
-1. Instale o [Node.js](https://nodejs.org) (versão 18 ou mais recente) — baixe o instalador "LTS" e siga o padrão.
-2. Abra o Prompt de Comando (ou PowerShell) dentro da pasta do projeto.
-3. Rode:
-   ```
-   npm install
-   npm start
-   ```
-4. Abra o navegador em **http://localhost:3010** (usamos a porta 3010 porque a 3000 já está ocupada por outro projeto seu, o EVE OS). O site já funciona por completo: cadastro, link de indicação, ranking e os números do hero.
-
-✅ **Se isso funcionou, o sistema está pronto.** As próximas etapas são só sobre colocá-lo num endereço público, pra qualquer pessoa acessar.
+O código já está pronto e commitado localmente. Faltam 3 contas: **Supabase** (banco), **GitHub** (onde o código fica hospedado) e **Vercel** (onde o site roda). Nessa ordem.
 
 ---
 
-## Etapa 2 — Colocar o site no ar (hospedagem)
+## Etapa 1 — Supabase (banco de dados)
 
-Como agora existe um servidor de verdade rodando (não é só HTML estático), a hospedagem precisa **rodar Node.js** e, de preferência, ter **disco persistente** (pra não perder os cadastros a cada atualização). Duas opções boas e simples:
+1. Acesse [supabase.com](https://supabase.com) e entre (ou crie conta).
+2. **New Project** → dê um nome (ex: "rede-de-apoio") → escolha uma senha de banco (guarde, mas não vai precisar dela diretamente) → escolha a região mais próxima (ex: São Paulo/`sa-east-1`, se disponível) → **Create new project**. Leva 1-2 minutos pra provisionar.
+3. No menu lateral, vá em **SQL Editor → New query**.
+4. Abra o arquivo `supabase-schema.sql` (nesta pasta), copie todo o conteúdo, cole no editor e clique **Run**. Isso cria a tabela `cadastros`.
+5. Vá em **Project Settings → API**. Você vai precisar de dois valores:
+   - **Project URL** (algo como `https://xxxxx.supabase.co`)
+   - **service_role key** (na seção "Project API keys" — é a chave **secreta**, não a `anon public`. Clique em "Reveal" pra ver)
 
-### Opção A — Railway (recomendado, tem plano gratuito com créditos)
+⚠️ **A `service_role key` dá acesso total ao banco, ignorando qualquer proteção.** Trate como uma senha — nunca cole ela em código que vai pro navegador, só em variáveis de ambiente do servidor (é exatamente o que vamos fazer na Etapa 3).
 
-1. Crie conta em [railway.app](https://railway.app) (dá pra entrar com GitHub).
-2. **New Project → Deploy from GitHub repo** (ou **Empty Project** e depois conectar) — você vai precisar subir esta pasta pro GitHub primeiro (veja Etapa 3 abaixo se nunca fez isso).
-3. O Railway detecta que é um projeto Node e roda `npm install` + `npm start` sozinho.
-4. Em **Settings → Variables**, adicione `ADMIN_TOKEN` com um valor forte (ex: uma senha longa e aleatória).
-5. Em **Settings → Volumes**, adicione um volume persistente apontando pra pasta `/app/data` — isso garante que os cadastros não somem quando você atualizar o código depois.
-6. O Railway te dá uma URL pública (`https://algo.up.railway.app`) — o site já está no ar.
-
-### Opção B — Render
-
-1. Crie conta em [render.com](https://render.com).
-2. **New → Web Service**, conecte o repositório do GitHub.
-3. Build command: `npm install` — Start command: `npm start`.
-4. Em **Environment**, adicione `ADMIN_TOKEN`.
-5. Em **Disks**, adicione um disco persistente montado em `/opt/render/project/src/data` (o plano gratuito do Render tem disco limitado/pode não incluir; se não tiver essa opção no seu plano, veja o aviso abaixo).
-
-> **Sobre perder dados:** hospedagem sem disco persistente apaga a pasta `data/` a cada novo deploy. Enquanto isso não estiver resolvido, baixe os cadastros regularmente em `https://SEU-SITE/api/export.csv?token=SEU_ADMIN_TOKEN` e guarde uma cópia.
+✅ **Termina esta etapa com:** Project URL + service_role key guardados.
 
 ---
 
-## Etapa 3 — Subir o projeto pro GitHub (se ainda não fez)
+## Etapa 2 — GitHub (onde o código mora)
 
-A maioria das hospedagens pede que o código esteja no GitHub.
-
-1. Crie uma conta em [github.com](https://github.com) se ainda não tiver.
-2. Crie um repositório novo (botão **New**), marque como **privado** (os dados de campanha não devem ficar públicos).
-3. No Prompt de Comando, dentro da pasta do projeto:
-   ```
-   git init
-   git add .
-   git commit -m "Rede de apoio - primeira versão"
-   git branch -M main
-   git remote add origin https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git
+1. Acesse [github.com/new](https://github.com/new).
+2. Nome do repositório: algo como `rede-de-apoio-gabriela-dani`.
+3. Marque **Private** (os dados de campanha e a estrutura do sistema não devem ficar públicos).
+4. **Não** marque "Add a README" (o projeto já tem um) — deixe o repositório vazio.
+5. Clique **Create repository**. O GitHub mostra uma URL tipo `https://github.com/SEU-USUARIO/rede-de-apoio-gabriela-dani.git` — copie ela.
+6. No terminal, dentro da pasta do projeto:
+   ```bash
+   git remote add origin https://github.com/SEU-USUARIO/rede-de-apoio-gabriela-dani.git
    git push -u origin main
    ```
-   (o `.gitignore` já garante que `node_modules/` e `data/` — que tem dados pessoais — não sobem pro GitHub)
+   (troque a URL pela que o GitHub te deu — se aparecer uma janela do navegador pedindo login, é o Git pedindo sua autorização, normal)
+
+✅ **Termina esta etapa com:** o código no GitHub, no repositório privado.
 
 ---
 
-## Etapa 4 — Domínio próprio (opcional)
+## Etapa 3 — Vercel (hospedagem)
 
-Se você comprar um domínio (ex: `redeapoiorj.com.br`), tanto Railway quanto Render têm uma tela de **Custom Domain** onde você aponta o domínio pro serviço. Sem isso, o endereço gerado automaticamente (`.railway.app` / `.onrender.com`) já funciona normalmente.
+1. Acesse [vercel.com](https://vercel.com) e entre **com a mesma conta do GitHub** (facilita a conexão).
+2. **Add New → Project**.
+3. Encontre o repositório `rede-de-apoio-gabriela-dani` na lista (autorize o Vercel a acessar seus repositórios do GitHub, se pedir) → **Import**.
+4. Antes de clicar em Deploy, abra **Environment Variables** e adicione, uma por uma:
+   - `SUPABASE_URL` → a Project URL da Etapa 1
+   - `SUPABASE_SERVICE_KEY` → a service_role key da Etapa 1
+   - `ADMIN_TOKEN` → uma senha forte, inventada por você (ex: gere uma em [1password.com/password-generator](https://1password.com/password-generator))
+5. Clique **Deploy**. Leva menos de um minuto.
+6. Quando terminar, o Vercel mostra a URL do site (algo como `https://rede-de-apoio-gabriela-dani.vercel.app`) — clique e confira se abre.
+
+✅ **Pronto — o site está no ar, com banco de dados real.**
 
 ---
 
-## Etapa 5 — Revisão jurídica (não pule)
+## Etapa 4 — Testar de ponta a ponta
 
-Antes de divulgar o link pra valer, mande `public/politica-privacidade.html` pra quem cuida do jurídico/compliance das duas campanhas. Ela já tem um aviso destacado no texto sobre um ponto que precisa de decisão formal: qual comitê financeiro é o responsável legal pelos dados desta rede de apoio compartilhada.
+1. Abra o site publicado, preencha o formulário de cadastro com um teste seu.
+2. Confirme que aparece a página de agradecimento com um link de indicação.
+3. Volte no Supabase → **Table Editor → cadastros** e confirme que a linha apareceu lá.
+4. Acesse `https://SEU-SITE.vercel.app/?ref=CODIGO-DO-TESTE` (o código que apareceu na Etapa 4.2) e cadastre uma segunda pessoa de teste — confirme que o ranking no site mostra 1 indicação pro primeiro cadastro.
+5. Depois de confirmar que tudo funciona, **apague as linhas de teste** direto no Table Editor do Supabase (clique na linha → excluir), pra não sujar as estatísticas reais.
+
+---
+
+## Etapa 5 — Domínio próprio (opcional)
+
+Se você comprar um domínio (ex: `redeapoiorj.com.br`), no projeto do Vercel vá em **Settings → Domains** e adicione o domínio — o Vercel te dá os registros DNS pra configurar onde você comprou o domínio.
+
+---
+
+## Etapa 6 — Revisão jurídica (não pule)
+
+Antes de divulgar o link pra valer, mande `public/politica-privacidade.html` pra quem cuida do jurídico/compliance das duas campanhas. Ela tem um aviso destacado sobre um ponto que precisa de decisão formal: qual comitê financeiro é o responsável legal pelos dados desta rede de apoio compartilhada.
 
 ---
 
 ## Se algo der errado
 
-- **`npm install` dá erro**: confirme que instalou o Node.js (rode `node --version` no terminal — se não reconhecer o comando, reinstale).
-- **O site abre mas o cadastro não funciona**: abra o Console do navegador (F12) e veja se aparece algum erro — geralmente é o servidor não estar rodando, ou a porta errada.
-- **Depois de hospedar, os cadastros somem a cada atualização**: falta configurar o disco persistente (Etapa 2) — sem isso, é esperado que o arquivo `data/cadastros.json` resete a cada deploy.
-- **Esqueci o `ADMIN_TOKEN` e preciso exportar os dados**: acesse a hospedagem (Railway/Render) e confira o valor em "Environment Variables" — se não configurou nenhum, a exportação está desativada por segurança.
-- Qualquer erro específico, me chame com a mensagem exata que apareceu — dá pra debugar junto.
+- **Deploy falha no Vercel**: clique no deploy que falhou → "View Build Logs" — geralmente é uma variável de ambiente faltando ou digitada errada.
+- **Site abre mas cadastro dá erro 503**: confira `SUPABASE_URL`/`SUPABASE_SERVICE_KEY` no Vercel (Settings → Environment Variables) — erro de digitação é a causa mais comum.
+- **Ranking não aparece**: confira se a tabela `cadastros` foi criada mesmo (Supabase → Table Editor) — se `supabase-schema.sql` não rodou, os endpoints falham.
+- **`git push` pede login toda hora**: normal na primeira vez; o Windows guarda a credencial depois (Git Credential Manager) — não digite sua senha do GitHub diretamente, sempre pela janela do navegador que abre.
+- Qualquer erro específico, me manda a mensagem exata (print ou texto) que apareceu — dá pra debugar junto.
