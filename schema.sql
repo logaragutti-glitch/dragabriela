@@ -1,6 +1,6 @@
--- Rede de Apoio — schema da tabela de cadastros no Vercel Postgres.
--- Rode isto uma vez na aba "Query" do banco, dentro do painel do Vercel (Storage → seu banco → Query),
--- ou via qualquer cliente Postgres conectado usando a POSTGRES_URL.
+-- Rede de Apoio — schema da tabela de cadastros no Neon (Postgres).
+-- Rode isto uma vez no SQL Editor do console do Neon (neon.tech — acessível a partir de
+-- Storage → seu banco, no painel do Vercel), ou via qualquer cliente Postgres usando a DATABASE_URL.
 
 create table if not exists cadastros (
   id bigint generated always as identity primary key,

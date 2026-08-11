@@ -1,4 +1,4 @@
-# Arquitetura — Rede de Apoio (Vercel + Vercel Postgres)
+# Arquitetura — Rede de Apoio (Vercel + Neon)
 
 ```
 Navegador (public/index.html, obrigado.html, politica-privacidade.html)
@@ -11,15 +11,15 @@ Navegador (public/index.html, obrigado.html, politica-privacidade.html)
 api/index.js  →  server.js (Express)
         │
         ▼
-   db.js (@vercel/postgres, tagged SQL)
+   db.js (@neondatabase/serverless, tagged SQL)
         │
         ▼
-  Vercel Postgres — tabela "cadastros"
+  Neon — tabela "cadastros" (Postgres serverless, conectado via Marketplace do Vercel)
 ```
 
-## Por que Vercel Postgres em vez de arquivo local
+## Por que Neon em vez de arquivo local
 
-O sistema já rodou com armazenamento em arquivo JSON local — funcionava bem numa máquina/servidor fixo. Mas o Vercel roda o backend como **função serverless**: sem disco persistente, sem garantia de que duas requisições caiam na mesma instância. Um arquivo local nesse ambiente se comporta como memória temporária — pode sumir a qualquer redeploy. Por isso o armazenamento foi pro Vercel Postgres (banco gerenciado, embutido no próprio painel do Vercel), compartilhado entre todas as instâncias da função.
+O sistema já rodou com armazenamento em arquivo JSON local — funcionava bem numa máquina/servidor fixo. Mas o Vercel roda o backend como **função serverless**: sem disco persistente, sem garantia de que duas requisições caiam na mesma instância. Um arquivo local nesse ambiente se comporta como memória temporária — pode sumir a qualquer redeploy. Por isso o armazenamento foi pro Neon (Postgres gerenciado, conectado ao projeto pela integração Neon no Marketplace do Vercel), compartilhado entre todas as instâncias da função.
 
 ## server.js roda em dois lugares diferentes
 
@@ -45,7 +45,7 @@ Uma única consulta SQL: `cadastros a JOIN cadastros b ON b.indicado_por = a.cod
 
 ## Segurança dos dados
 
-- `POSTGRES_URL` é uma string de conexão com usuário/senha embutidos — trate como senha. Nunca vai pro frontend, só existe nas variáveis de ambiente do servidor (local `.env`, ou nas Environment Variables do projeto no Vercel).
+- `DATABASE_URL` é uma string de conexão com usuário/senha embutidos — trate como senha. Nunca vai pro frontend, só existe nas variáveis de ambiente do servidor (local `.env`, ou nas Environment Variables do projeto no Vercel).
 - `/api/export.csv` só funciona com o `ADMIN_TOKEN` correto — sem essa variável configurada, o endpoint fica bloqueado.
 - `indicado_por` só é aceito se corresponder a um `codigo_indicacao` que já existe no banco — não dá pra inflar o ranking com códigos inventados.
 - Rate limit de 5 cadastros/minuto por IP (proteção básica contra spam — em serverless isso é por instância, não é um limite global rígido; para tráfego grande valeria um serviço dedicado de rate limiting).
@@ -53,5 +53,5 @@ Uma única consulta SQL: `cadastros a JOIN cadastros b ON b.indicado_por = a.cod
 ## Limitações conhecidas (honestas)
 
 - **Rate limit não é global**: cada instância serverless tem sua própria memória, então o limite de 5/min é "por instância", não "por IP no mundo todo". Suficiente contra bots simples, não contra um ataque coordenado.
-- **Plano gratuito do Vercel Postgres tem limites de armazenamento e de linhas/consultas** — mais que suficiente pra uma campanha regional, mas vale acompanhar o painel de uso se o volume crescer muito.
-- **Backup**: o Vercel Postgres (Neon por baixo) mantém histórico de mudanças por um período limitado no plano gratuito. `/api/export.csv` serve como backup manual — vale baixar periodicamente.
+- **Plano gratuito do Neon tem limites de armazenamento e de horas de computação** — mais que suficiente pra uma campanha regional, mas vale acompanhar o painel de uso se o volume crescer muito.
+- **Backup**: o Neon mantém histórico de mudanças (point-in-time restore) por um período limitado no plano gratuito. `/api/export.csv` serve como backup manual — vale baixar periodicamente.

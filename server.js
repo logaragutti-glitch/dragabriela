@@ -1,5 +1,5 @@
-// Rede de Apoio — backend (Express + Vercel Postgres)
-// Local: npm install && npm start (precisa de POSTGRES_URL no ambiente)
+// Rede de Apoio — backend (Express + Neon/Postgres)
+// Local: npm install && npm start (precisa de DATABASE_URL no ambiente)
 // Vercel: este arquivo é importado por api/index.js como função serverless.
 
 // Carrega variáveis de um arquivo .env quando ele existir (uso local). No Vercel, as variáveis

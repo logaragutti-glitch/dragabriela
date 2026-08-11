@@ -2,11 +2,11 @@
 
 Sistema completo (site + backend + banco) de "rede de apoio" para a campanha conjunta de **Dra. Gabriela** (candidata a Deputada Estadual, RJ) e **Dani Cunha** (Deputada Federal, RJ, candidata à reeleição): cadastro de apoiadores, link de indicação pessoal e ranking público de quem mais indica.
 
-Stack: **Express** (backend) + **Vercel Postgres** (dados) + **Vercel** (hospedagem) — tudo no mesmo painel.
+Stack: **Express** (backend) + **Neon/Postgres** (dados, via integração Marketplace do Vercel) + **Vercel** (hospedagem) — tudo gerenciado a partir do mesmo painel do Vercel.
 
 ## Rodando localmente
 
-1. Crie o projeto no Vercel e o banco (ver `PRIMEIROS-PASSOS.md` — resumindo: Vercel → Storage → Create Database → Postgres).
+1. Crie o projeto no Vercel e o banco (ver `PRIMEIROS-PASSOS.md` — resumindo: Vercel → Storage → Browse Storage → Neon).
 2. Rode o conteúdo de `schema.sql` na aba **Query** do banco, dentro do painel do Vercel (cria a tabela `cadastros`).
 3. Puxe as variáveis de ambiente reais pro seu computador:
    ```bash
@@ -28,7 +28,7 @@ Passo a passo detalhado, com cliques explicados: `PRIMEIROS-PASSOS.md`.
 | Arquivo/pasta | O que é |
 |---|---|
 | `server.js` | App Express: rotas do site + API de cadastro/ranking/estatísticas |
-| `db.js` | Camada de acesso ao Vercel Postgres (única parte que fala com o banco) |
+| `db.js` | Camada de acesso ao banco Neon (única parte que fala com o banco) |
 | `api/index.js` | Ponto de entrada da função serverless no Vercel (reexporta `server.js`) |
 | `vercel.json` | Roteia toda requisição pra `api/index.js` no Vercel |
 | `schema.sql` | SQL pra criar a tabela `cadastros` — rode uma vez no banco |
@@ -51,7 +51,7 @@ Passo a passo detalhado, com cliques explicados: `PRIMEIROS-PASSOS.md`.
 
 | Variável | Obrigatória? | Pra que serve |
 |---|---|---|
-| `POSTGRES_URL` | Sim | String de conexão com o banco — injetada automaticamente pelo Vercel quando o banco está linkado ao projeto |
+| `DATABASE_URL` | Sim | String de conexão com o banco — injetada automaticamente pelo Vercel quando o banco está linkado ao projeto |
 | `ADMIN_TOKEN` | Não | Libera `/api/export.csv`. Sem ela, a exportação fica desativada |
 | `PORT` | Não | Só usada localmente (padrão 3010). O Vercel define a porta sozinho |
 
@@ -59,7 +59,7 @@ Passo a passo detalhado, com cliques explicados: `PRIMEIROS-PASSOS.md`.
 
 1. ~~**Conteúdo**~~ — já preenchido: nomes, cargos, bios e trajetória das duas candidatas, contatos (WhatsApp, e-mail, Instagram/site oficial).
 2. **Cores** — ajuste as variáveis CSS em `:root` (mesmo bloco nos 3 arquivos HTML): `--tinta`, `--acento`, `--verde`.
-3. **Banco** — crie o Postgres pelo painel do Vercel e rode `schema.sql`.
+3. **Banco** — conecte o Neon pelo painel do Vercel (Storage → Browse Storage) e rode `schema.sql`.
 4. **`ADMIN_TOKEN`** — defina um valor forte no projeto do Vercel antes de publicar.
 5. **Jurídico** — revise `public/politica-privacidade.html` com quem cuida disso nas duas campanhas (há um aviso destacado sobre definir o "controlador" dos dados).
 
