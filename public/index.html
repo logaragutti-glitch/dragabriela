@@ -276,6 +276,14 @@
     border-radius:14px;
     padding:32px;
   }
+  .candidata-topo{display:flex;align-items:center;gap:18px;}
+  .candidata-foto{
+    width:88px;height:88px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid var(--acento-clara);
+    flex-shrink:0;
+  }
   .candidata-card .cargo{
     font-family:'IBM Plex Mono',monospace;
     font-size:0.7rem;
@@ -283,7 +291,7 @@
     letter-spacing:0.08em;
     color:var(--acento-clara);
   }
-  .candidata-card h3{font-size:1.35rem;color:var(--branco);margin:10px 0 14px;}
+  .candidata-card h3{font-size:1.35rem;color:var(--branco);margin:6px 0 0;}
   .candidata-card .bio{font-size:0.9rem;color:rgba(243,241,234,0.78);margin-bottom:22px;}
   .candidata-marcos{display:flex;flex-direction:column;gap:14px;border-top:1px solid rgba(243,241,234,0.15);padding-top:18px;}
   .candidata-marco strong{color:var(--branco);display:block;font-size:0.88rem;margin-bottom:2px;}
@@ -595,9 +603,14 @@
 
     <div class="candidatas-grid">
       <div class="candidata-card reveal">
-        <div class="cargo">Candidata a Deputada Estadual</div>
-        <h3>Dra. Gabriela</h3>
-        <p class="bio">Gabriela Maria Gonçalves Azevedo é filha de Vaninha e Sérgio, e irmã de Sérgio Azevedo (o Dr. Serginho, prefeito de Cabo Frio), Filipe e Miguel. É casada com o médico Dr. Illo Rangel. Antes da política, construiu uma carreira de destaque na medicina de alta complexidade e nas iniciativas de saúde pública da Região dos Lagos.</p>
+        <div class="candidata-topo">
+          <img class="candidata-foto" src="img/gabriela-cortes.jpg" alt="Foto de Dra. Gabriela" loading="lazy">
+          <div>
+            <div class="cargo">Candidata a Deputada Estadual</div>
+            <h3>Dra. Gabriela</h3>
+          </div>
+        </div>
+        <p class="bio" style="margin-top:20px;">Gabriela Maria Gonçalves Azevedo é filha de Vaninha e Sérgio, e irmã de Sérgio Azevedo (o Dr. Serginho, prefeito de Cabo Frio), Filipe e Miguel. É casada com o médico Dr. Illo Rangel. Antes da política, construiu uma carreira de destaque na medicina de alta complexidade e nas iniciativas de saúde pública da Região dos Lagos.</p>
         <div class="candidata-marcos">
           <div class="candidata-marco"><strong>Pioneirismo em Hemodinâmica</strong><span>4ª mulher no Rio de Janeiro a atuar em cardiologia intervencionista.</span></div>
           <div class="candidata-marco"><strong>Formação de excelência</strong><span>Medicina pela UFRJ, com especializações em Clínica Médica e Cardiologia, e formação em Hemodinâmica pelo IECAC.</span></div>
@@ -606,9 +619,14 @@
       </div>
 
       <div class="candidata-card reveal">
-        <div class="cargo">Deputada Federal · Candidata à reeleição</div>
-        <h3>Dani Cunha</h3>
-        <p class="bio">Danielle Dytz da Cunha nasceu no Rio de Janeiro em 1987. É publicitária formada pela ESPM, com especialização na UC Berkeley e MBA pela ESADE Business School, em Barcelona. Antes da política, teve uma trajetória de empreendedorismo: foi CEO de um fundo de investimentos aos 25 anos e ajudou a criar e mentorar empresas de base tecnológica.</p>
+        <div class="candidata-topo">
+          <img class="candidata-foto" src="img/dani-cunha.jpg" alt="Foto de Dani Cunha" loading="lazy">
+          <div>
+            <div class="cargo">Deputada Federal · Candidata à reeleição</div>
+            <h3>Dani Cunha</h3>
+          </div>
+        </div>
+        <p class="bio" style="margin-top:20px;">Danielle Dytz da Cunha nasceu no Rio de Janeiro em 1987. É publicitária formada pela ESPM, com especialização na UC Berkeley e MBA pela ESADE Business School, em Barcelona. Antes da política, teve uma trajetória de empreendedorismo: foi CEO de um fundo de investimentos aos 25 anos e ajudou a criar e mentorar empresas de base tecnológica.</p>
         <div class="candidata-marcos">
           <div class="candidata-marco"><strong>Eleita em 2022</strong><span>75.810 votos pelo Rio de Janeiro, pelo União Brasil.</span></div>
           <div class="candidata-marco"><strong>Atuação em comissões estratégicas</strong><span>Constituição e Justiça (CCJ), Orçamento, Saúde, e Finanças e Tributação, na Câmara dos Deputados.</span></div>
