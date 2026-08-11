@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dra. Gabriela & Dani Cunha — Rede de Apoio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --fundo: #F3F1EA;
+    --fundo-escuro: #E7E2D3;
+    --tinta: #16233A;
+    --tinta-suave: #2B3F5C;
+    --acento: #B98A2E;
+    --acento-clara: #D9AE5C;
+    --verde: #2E6E52;
+    --verde-clara: #4C9376;
+    --coral: #B4553F;
+    --branco: #FFFFFF;
+    --linha: rgba(22,35,58,0.14);
+    --sombra: 0 20px 60px rgba(22,35,58,0.12);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--fundo);
+    color:var(--tinta);
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;text-decoration:none;}
+  h1,h2,h3{font-family:'Fraunces',serif;font-weight:500;letter-spacing:-0.01em;}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--verde);
+    display:flex;
+    align-items:center;
+    gap:0.6rem;
+  }
+  .eyebrow::before{
+    content:'';
+    width:22px;height:1px;
+    background:var(--verde);
+    display:inline-block;
+  }
+  .container{max-width:1180px;margin:0 auto;padding:0 24px;}
+  section{position:relative;}
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(243,241,234,0.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--linha);
+  }
+  .nav-inner{
+    max-width:1180px;margin:0 auto;padding:16px 24px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .logo{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:1.25rem;
+    font-weight:500;
+    color:var(--tinta);
+    display:flex;align-items:center;gap:8px;
+  }
+  .logo span{
+    font-family:'IBM Plex Mono',monospace;
+    font-style:normal;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--acento);
+    border:1px solid var(--acento);
+    padding:3px 8px;
+    border-radius:100px;
+  }
+  .nav-links{
+    display:flex;gap:28px;
+    font-size:0.86rem;
+    font-weight:500;
+  }
+  .nav-links a{
+    position:relative;
+    padding-bottom:4px;
+  }
+  .nav-links a::after{
+    content:'';position:absolute;bottom:0;left:0;
+    width:0;height:1px;background:var(--acento);
+    transition:width 0.25s;
+  }
+  .nav-links a:hover::after{width:100%;}
+  .nav-cta{
+    background:var(--tinta);
+    color:var(--fundo);
+    padding:10px 20px;
+    border-radius:100px;
+    font-size:0.82rem;
+    font-weight:600;
+    white-space:nowrap;
+  }
+  .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;}
+  .hamburger span{width:22px;height:2px;background:var(--tinta);display:block;}
+  .mobile-menu{
+    display:none;
+    position:fixed;top:64px;left:0;right:0;bottom:0;
+    background:var(--fundo);
+    z-index:99;
+    padding:32px 24px;
+    flex-direction:column;
+    gap:24px;
+    font-size:1.1rem;
+    font-weight:500;
+  }
+  .mobile-menu.open{display:flex;}
+
+  @media(max-width:860px){
+    .nav-links, .nav-cta{display:none;}
+    .hamburger{display:flex;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-top:120px;
+    padding-bottom:80px;
+    background:
+      radial-gradient(ellipse 900px 500px at 85% 15%, rgba(185,138,46,0.16), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 10% 90%, rgba(46,110,82,0.14), transparent 60%),
+      var(--fundo);
+  }
+  .hero-eyebrow{margin-bottom:28px;}
+  .hero h1{
+    font-size:clamp(2.3rem, 5.6vw, 4.2rem);
+    line-height:1.06;
+    max-width:900px;
+    color:var(--tinta);
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:var(--acento);
+  }
+  .hero-sub{
+    max-width:540px;
+    margin-top:26px;
+    font-size:1.06rem;
+    color:var(--tinta-suave);
+  }
+  .hero-ctas{
+    margin-top:40px;
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    padding:16px 30px;
+    border-radius:100px;
+    font-weight:600;
+    font-size:0.95rem;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    border:1px solid transparent;
+    cursor:pointer;
+    transition:transform 0.2s, box-shadow 0.2s;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--tinta);color:var(--fundo);box-shadow:var(--sombra);}
+  .btn-outline{background:transparent;color:var(--tinta);border-color:var(--tinta);}
+  .btn-gold{background:var(--acento);color:var(--branco);}
+
+  .hero-meta{
+    margin-top:60px;
+    display:flex;
+    gap:44px;
+    flex-wrap:wrap;
+    border-top:1px solid var(--linha);
+    padding-top:26px;
+    max-width:720px;
+  }
+  .hero-meta-item .num{
+    font-family:'Fraunces',serif;
+    font-size:1.8rem;
+    color:var(--tinta);
+    display:block;
+  }
+  .hero-meta-item .lbl{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.7rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--tinta-suave);
+    opacity:0.7;
+  }
+
+  /* ---------- SOBRE ---------- */
+  .sobre{
+    background:var(--tinta);
+    color:var(--fundo);
+    padding:110px 0;
+  }
+  .sobre .eyebrow{color:var(--acento-clara);}
+  .sobre .eyebrow::before{background:var(--acento-clara);}
+  .sobre-grid{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:80px;
+    margin-top:36px;
+    align-items:start;
+  }
+  .sobre h2{
+    font-size:clamp(1.8rem,3.4vw,2.5rem);
+    line-height:1.18;
+    color:var(--branco);
+  }
+  .sobre h2 em{color:var(--acento-clara);font-style:italic;}
+  .sobre-copy{
+    margin-top:22px;
+    color:rgba(243,241,234,0.78);
+    font-size:1rem;
+    max-width:480px;
+  }
+  .sobre-list{
+    display:flex;flex-direction:column;gap:0;
+    border-top:1px solid rgba(243,241,234,0.15);
+  }
+  .sobre-list-item{
+    padding:22px 0;
+    border-bottom:1px solid rgba(243,241,234,0.15);
+    display:flex;
+    gap:20px;
+    align-items:baseline;
+  }
+  .sobre-list-item .num{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    color:var(--acento-clara);
+    font-size:1.1rem;
+    min-width:32px;
+  }
+  .sobre-list-item h3{
+    font-size:1.02rem;
+    color:var(--branco);
+    font-weight:500;
+    margin-bottom:4px;
+  }
+  .sobre-list-item p{
+    font-size:0.88rem;
+    color:rgba(243,241,234,0.65);
+  }
+  @media(max-width:860px){
+    .sobre-grid{grid-template-columns:1fr;gap:40px;}
+  }
+
+  /* ---------- CANDIDATAS (duas bios lado a lado) ---------- */
+  .candidatas-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:28px;
+    margin-top:48px;
+  }
+  .candidata-card{
+    background:rgba(243,241,234,0.05);
+    border:1px solid rgba(243,241,234,0.15);
+    border-radius:14px;
+    padding:32px;
+  }
+  .candidata-card .cargo{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--acento-clara);
+  }
+  .candidata-card h3{font-size:1.35rem;color:var(--branco);margin:10px 0 14px;}
+  .candidata-card .bio{font-size:0.9rem;color:rgba(243,241,234,0.78);margin-bottom:22px;}
+  .candidata-marcos{display:flex;flex-direction:column;gap:14px;border-top:1px solid rgba(243,241,234,0.15);padding-top:18px;}
+  .candidata-marco strong{color:var(--branco);display:block;font-size:0.88rem;margin-bottom:2px;}
+  .candidata-marco span{font-size:0.85rem;color:rgba(243,241,234,0.68);}
+  @media(max-width:860px){
+    .candidatas-grid{grid-template-columns:1fr;}
+  }
+
+  /* ---------- PROPOSTAS ---------- */
+  .propostas{padding:110px 0;}
+  .propostas-head{max-width:600px;margin-bottom:48px;}
+  .propostas-head h2{font-size:clamp(1.8rem,3.4vw,2.4rem);}
+  .propostas-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+  }
+  .proposta-card{
+    background:var(--branco);
+    border:1px solid var(--linha);
+    border-radius:12px;
+    padding:30px 26px;
+  }
+  .proposta-card .num{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    color:var(--acento);
+    font-size:1.4rem;
+  }
+  .proposta-card h3{font-size:1.08rem;margin:14px 0 8px;}
+  .proposta-card p{font-size:0.88rem;color:var(--tinta-suave);}
+  .propostas-subhead{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.72rem;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:var(--verde);
+    margin:56px 0 18px;
+  }
+  .propostas-subhead:first-of-type{margin-top:0;}
+  @media(max-width:860px){.propostas-grid{grid-template-columns:1fr;}}
+
+  /* ---------- COMO FUNCIONA ---------- */
+  .como-funciona{background:var(--fundo-escuro);padding:110px 0;}
+  .cf-head{max-width:560px;margin-bottom:48px;}
+  .cf-head h2{font-size:clamp(1.8rem,3.4vw,2.4rem);}
+  .cf-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .cf-card{
+    background:var(--branco);
+    border-radius:14px;
+    padding:32px 28px;
+    box-shadow:var(--sombra);
+  }
+  .cf-card .step{
+    width:38px;height:38px;
+    border-radius:50%;
+    background:var(--verde);
+    color:var(--branco);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.85rem;
+    margin-bottom:18px;
+  }
+  .cf-card h3{font-size:1.1rem;margin-bottom:8px;}
+  .cf-card p{font-size:0.88rem;color:var(--tinta-suave);}
+  @media(max-width:860px){.cf-grid{grid-template-columns:1fr;}}
+
+  /* ---------- CADASTRO ---------- */
+  .cadastro{padding:110px 0;}
+  .cadastro-grid{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:60px;
+    align-items:start;
+  }
+  .cadastro-head h2{font-size:clamp(1.8rem,3.4vw,2.4rem);margin-top:14px;}
+  .cadastro-head p{margin-top:18px;color:var(--tinta-suave);font-size:0.95rem;max-width:420px;}
+  .form-card{
+    background:var(--branco);
+    border-radius:14px;
+    padding:40px;
+    box-shadow:var(--sombra);
+    border-top:4px solid var(--verde);
+  }
+  .field-row{display:flex;gap:12px;margin-bottom:14px;}
+  .field{flex:1;display:flex;flex-direction:column;gap:6px;}
+  .field label{
+    font-size:0.72rem;font-weight:600;
+    text-transform:uppercase;letter-spacing:0.04em;
+    color:var(--tinta-suave);
+  }
+  .field .opcional{text-transform:none;font-weight:400;opacity:0.7;}
+  .field input, .field select{
+    border:1px solid var(--linha);
+    background:var(--fundo);
+    border-radius:8px;
+    padding:12px 14px;
+    font-family:'Inter',sans-serif;
+    font-size:0.92rem;
+    color:var(--tinta);
+  }
+  .field input:focus, .field select:focus{
+    outline:2px solid var(--verde);
+    outline-offset:1px;
+  }
+  .radio-group{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+  .radio-chip{
+    border:1px solid var(--linha);
+    padding:9px 16px;
+    border-radius:100px;
+    font-size:0.84rem;
+    cursor:pointer;
+    background:var(--fundo);
+    transition:background 0.2s,color 0.2s;
+  }
+  .radio-chip.active{background:var(--verde);color:var(--branco);border-color:var(--verde);}
+  .form-submit{
+    width:100%;
+    margin-top:10px;
+    padding:15px;
+    border-radius:8px;
+    border:none;
+    background:var(--tinta);
+    color:var(--branco);
+    font-weight:600;
+    font-size:0.95rem;
+    cursor:pointer;
+  }
+  .form-note{
+    margin-top:16px;
+    font-size:0.78rem;
+    color:var(--tinta-suave);
+    opacity:0.75;
+  }
+  .consent-row{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    margin:6px 0 18px;
+  }
+  .consent-row input[type="checkbox"]{
+    margin-top:3px;
+    flex-shrink:0;
+    width:16px;height:16px;
+    accent-color:var(--verde);
+  }
+  .consent-row label{
+    font-size:0.8rem;
+    color:var(--tinta-suave);
+    line-height:1.5;
+  }
+  .consent-row a{color:var(--verde);text-decoration:underline;}
+  .indicado-banner{
+    display:none;
+    background:rgba(46,110,82,0.1);
+    border:1px solid rgba(46,110,82,0.3);
+    border-radius:8px;
+    padding:12px 16px;
+    font-size:0.84rem;
+    color:var(--verde);
+    margin-bottom:20px;
+  }
+  .indicado-banner.show{display:block;}
+  @media(max-width:860px){
+    .cadastro-grid{grid-template-columns:1fr;gap:36px;}
+    .field-row{flex-direction:column;gap:14px;}
+  }
+
+  /* ---------- RANKING ---------- */
+  .ranking{background:var(--fundo-escuro);padding:110px 0;}
+  .ranking-head{
+    display:flex;justify-content:space-between;align-items:end;
+    flex-wrap:wrap;gap:20px;
+    margin-bottom:40px;
+  }
+  .ranking-head h2{font-size:clamp(1.8rem,3.4vw,2.4rem);max-width:520px;}
+  .ranking-note{font-size:0.86rem;color:var(--tinta-suave);max-width:280px;}
+  .ranking-table{
+    width:100%;
+    border-collapse:collapse;
+    background:var(--branco);
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:var(--sombra);
+  }
+  .ranking-table th, .ranking-table td{
+    text-align:left;
+    padding:16px 20px;
+    border-bottom:1px solid var(--linha);
+    font-size:0.92rem;
+  }
+  .ranking-table th{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.68rem;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--tinta-suave);
+    background:var(--fundo);
+  }
+  .ranking-table tr:last-child td{border-bottom:none;}
+  .ranking-pos{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    color:var(--acento);
+  }
+  .ranking-count{font-weight:600;color:var(--verde);}
+  .ranking-empty{padding:40px 20px;text-align:center;color:var(--tinta-suave);font-size:0.9rem;background:var(--branco);border-radius:12px;}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--fundo-escuro);
+    padding:70px 0 30px;
+  }
+  .footer-grid{
+    display:grid;
+    grid-template-columns:1.3fr 1fr 1fr;
+    gap:48px;
+    padding-bottom:44px;
+    border-bottom:1px solid var(--linha);
+  }
+  .footer-logo{font-family:'Fraunces',serif;font-style:italic;font-size:1.3rem;margin-bottom:14px;}
+  .footer-col h4{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;
+    color:var(--tinta-suave);margin-bottom:16px;
+  }
+  .footer-col a, .footer-col p{
+    display:block;font-size:0.9rem;margin-bottom:10px;color:var(--tinta);
+  }
+  .footer-bottom{
+    padding-top:24px;
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+    font-size:0.78rem;color:var(--tinta-suave);
+  }
+  @media(max-width:860px){.footer-grid{grid-template-columns:1fr;gap:32px;}}
+
+  /* ---------- WHATSAPP FLOATING ---------- */
+  .wa-float{
+    position:fixed;bottom:24px;right:24px;z-index:90;
+    background:var(--verde);
+    color:var(--branco);
+    width:58px;height:58px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 30px rgba(22,35,58,0.3);
+    font-size:1.5rem;
+  }
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s ease, transform 0.7s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    .reveal{opacity:1;transform:none;transition:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="logo">Gabriela &amp; Dani <span>rede de apoio</span></div>
+    <div class="nav-links">
+      <a href="#sobre">Sobre</a>
+      <a href="#propostas">Trajetória</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#ranking">Ranking</a>
+      <a href="#cadastre-se">Cadastre-se</a>
+    </div>
+    <a href="#cadastre-se" class="nav-cta">Fazer parte</a>
+    <button class="hamburger" id="hamburger" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#sobre">Sobre</a>
+  <a href="#propostas">Trajetória</a>
+  <a href="#como-funciona">Como funciona</a>
+  <a href="#ranking">Ranking</a>
+  <a href="#cadastre-se">Cadastre-se</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow hero-eyebrow">Dra. Gabriela · Deputada Estadual — Dani Cunha · Deputada Federal</div>
+    <h1>Construa com a gente a <em>rede de apoio</em> de Dra. Gabriela e Dani Cunha.</h1>
+    <p class="hero-sub">Cadastre-se, compartilhe seu link exclusivo e ajude a fortalecer essa dupla de representação — de Cabo Frio e toda a Região dos Lagos até Brasília. Quanto mais gente você trouxer, mais alto você sobe no ranking.</p>
+    <div class="hero-ctas">
+      <a href="#cadastre-se" class="btn btn-primary">Quero fazer parte →</a>
+      <a href="#ranking" class="btn btn-outline">Ver ranking de indicações</a>
+    </div>
+    <div class="hero-meta">
+      <div class="hero-meta-item"><span class="num" id="statApoiadores">—</span><span class="lbl">Apoiadores cadastrados</span></div>
+      <div class="hero-meta-item"><span class="num" id="statCidades">—</span><span class="lbl">Cidades já representadas</span></div>
+      <div class="hero-meta-item"><span class="num">2</span><span class="lbl">Vozes por você: estadual e federal</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section class="sobre" id="sobre">
+  <div class="container">
+    <div class="eyebrow">As candidatas</div>
+    <h2 class="reveal" style="margin-top:14px;max-width:700px;">Duas trajetórias, um só compromisso com o Rio de Janeiro.</h2>
+    <p class="sobre-copy reveal">Dra. Gabriela e Dani Cunha representam o Rio de Janeiro em duas frentes — a Assembleia Legislativa estadual e a Câmara dos Deputados em Brasília. Juntas, formam uma rede de apoio única: quem se cadastra ajuda a fortalecer as duas candidaturas ao mesmo tempo.</p>
+
+    <div class="candidatas-grid">
+      <div class="candidata-card reveal">
+        <div class="cargo">Candidata a Deputada Estadual</div>
+        <h3>Dra. Gabriela</h3>
+        <p class="bio">Gabriela Maria Gonçalves Azevedo é filha de Vaninha e Sérgio, e irmã de Sérgio Azevedo (o Dr. Serginho, prefeito de Cabo Frio), Filipe e Miguel. É casada com o médico Dr. Illo Rangel. Antes da política, construiu uma carreira de destaque na medicina de alta complexidade e nas iniciativas de saúde pública da Região dos Lagos.</p>
+        <div class="candidata-marcos">
+          <div class="candidata-marco"><strong>Pioneirismo em Hemodinâmica</strong><span>4ª mulher no Rio de Janeiro a atuar em cardiologia intervencionista.</span></div>
+          <div class="candidata-marco"><strong>Formação de excelência</strong><span>Medicina pela UFRJ, com especializações em Clínica Médica e Cardiologia, e formação em Hemodinâmica pelo IECAC.</span></div>
+          <div class="candidata-marco"><strong>Reconhecimento científico</strong><span>Premiada em 2024 pela Academia Nacional de Medicina por estudo sobre tratamento da cardiomiopatia hipertrófica.</span></div>
+        </div>
+      </div>
+
+      <div class="candidata-card reveal">
+        <div class="cargo">Deputada Federal · Candidata à reeleição</div>
+        <h3>Dani Cunha</h3>
+        <p class="bio">Danielle Dytz da Cunha nasceu no Rio de Janeiro em 1987. É publicitária formada pela ESPM, com especialização na UC Berkeley e MBA pela ESADE Business School, em Barcelona. Antes da política, teve uma trajetória de empreendedorismo: foi CEO de um fundo de investimentos aos 25 anos e ajudou a criar e mentorar empresas de base tecnológica.</p>
+        <div class="candidata-marcos">
+          <div class="candidata-marco"><strong>Eleita em 2022</strong><span>75.810 votos pelo Rio de Janeiro, pelo União Brasil.</span></div>
+          <div class="candidata-marco"><strong>Atuação em comissões estratégicas</strong><span>Constituição e Justiça (CCJ), Orçamento, Saúde, e Finanças e Tributação, na Câmara dos Deputados.</span></div>
+          <div class="candidata-marco"><strong>Formação de empreendedores</strong><span>Já mentorou empresas de tecnologia e formou mais de 10 mil alunos em cursos gratuitos de empreendedorismo.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRAJETÓRIA E REALIZAÇÕES -->
+<section class="propostas" id="propostas">
+  <div class="container">
+    <div class="propostas-head">
+      <div class="eyebrow">Trajetória e realizações</div>
+      <h2 class="reveal" style="margin-top:14px;">O que cada uma já construiu — e o que vem a seguir.</h2>
+    </div>
+
+    <div class="propostas-subhead">Dra. Gabriela · Deputada Estadual</div>
+    <div class="propostas-grid">
+      <div class="proposta-card reveal">
+        <span class="num">01</span>
+        <h3>Atendimento pelo SUS</h3>
+        <p>Integra a equipe do Hospital Santa Izabel, em Cabo Frio, realizando cateterismo e angioplastia via SUS para pacientes do município e de cidades vizinhas.</p>
+      </div>
+      <div class="proposta-card reveal">
+        <span class="num">02</span>
+        <h3>Faculdade de Medicina em Cabo Frio</h3>
+        <p>Uma das principais idealizadoras da articulação para trazer o curso superior de Medicina à cidade, formando profissionais localmente e fortalecendo o SUS regional.</p>
+      </div>
+      <div class="proposta-card reveal">
+        <span class="num">03</span>
+        <h3>Medalha Mérito Brigadeiro Lafayette Cantarino Rodrigues de Souza</h3>
+        <p>Homenageada no legislativo regional pela dedicação à saúde e à ciência na Região dos Lagos.</p>
+      </div>
+    </div>
+
+    <div class="propostas-subhead">Dani Cunha · Deputada Federal</div>
+    <div class="propostas-grid">
+      <div class="proposta-card reveal">
+        <span class="num">01</span>
+        <h3>Eleita em 2022</h3>
+        <p>75.810 votos pelo Rio de Janeiro, pelo União Brasil — hoje busca a reeleição pra Câmara dos Deputados.</p>
+      </div>
+      <div class="proposta-card reveal">
+        <span class="num">02</span>
+        <h3>Comissões estratégicas</h3>
+        <p>Atua nas comissões de Constituição e Justiça (CCJ), Orçamento, Saúde, e Finanças e Tributação.</p>
+      </div>
+      <div class="proposta-card reveal">
+        <span class="num">03</span>
+        <h3>Formação de empreendedores</h3>
+        <p>Publicitária pela ESPM, com passagem pela UC Berkeley e MBA pela ESADE — já formou mais de 10 mil alunos em cursos gratuitos de empreendedorismo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="como-funciona" id="como-funciona">
+  <div class="container">
+    <div class="cf-head">
+      <div class="eyebrow">Como funciona a rede</div>
+      <h2 class="reveal" style="margin-top:14px;">Três passos para fazer parte.</h2>
+    </div>
+    <div class="cf-grid">
+      <div class="cf-card reveal">
+        <div class="step">1</div>
+        <h3>Cadastre-se</h3>
+        <p>Preencha nome e WhatsApp abaixo. Leva menos de um minuto.</p>
+      </div>
+      <div class="cf-card reveal">
+        <div class="step">2</div>
+        <h3>Compartilhe seu link</h3>
+        <p>Você recebe um link de indicação só seu — envie para amigos e família.</p>
+      </div>
+      <div class="cf-card reveal">
+        <div class="step">3</div>
+        <h3>Suba no ranking</h3>
+        <p>Cada pessoa que se cadastra pelo seu link conta pra você no ranking público de apoiadores.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CADASTRO -->
+<section class="cadastro" id="cadastre-se">
+  <div class="container">
+    <div class="cadastro-grid">
+      <div class="cadastro-head reveal">
+        <div class="eyebrow">Cadastre-se</div>
+        <h2>Faça parte da rede de apoio.</h2>
+        <p>Seus dados são usados apenas para organizar a rede de apoiadores e manter contato sobre a campanha. Veja como tratamos suas informações na <a href="politica-privacidade.html" style="color:var(--verde);text-decoration:underline;">Política de Privacidade</a>.</p>
+      </div>
+
+      <div class="form-card reveal">
+        <div class="indicado-banner" id="indicadoBanner">Você está entrando pela indicação de um apoiador. Obrigado por fazer parte! 🎉</div>
+
+        <div class="field-row">
+          <div class="field"><label>Nome completo</label><input type="text" id="c-nome" placeholder="Seu nome completo"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>WhatsApp</label><input type="text" id="c-whatsapp" placeholder="(00) 00000-0000"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Cidade</label><input type="text" id="c-cidade" placeholder="Sua cidade"></div>
+          <div class="field"><label>Bairro</label><input type="text" id="c-bairro" placeholder="Seu bairro"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Data de aniversário <span class="opcional">(opcional)</span></label><input type="date" id="c-aniversario"></div>
+        </div>
+        <label style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--tinta-suave);display:block;margin-bottom:8px;">Sexo <span class="opcional" style="text-transform:none;">(opcional)</span></label>
+        <div class="radio-group" data-group="sexo">
+          <div class="radio-chip">Feminino</div>
+          <div class="radio-chip">Masculino</div>
+          <div class="radio-chip">Outro</div>
+          <div class="radio-chip active">Prefiro não informar</div>
+        </div>
+
+        <button class="form-submit" id="btnCadastro">Quero fazer parte da rede →</button>
+        <div class="consent-row">
+          <input type="checkbox" id="consent-cadastro">
+          <label for="consent-cadastro">Li e concordo com a <a href="politica-privacidade.html">Política de Privacidade</a>, e autorizo o contato por WhatsApp sobre a campanha.</label>
+        </div>
+        <p class="form-note">Você recebe seu link de indicação pessoal por WhatsApp logo após o cadastro.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RANKING -->
+<section class="ranking" id="ranking">
+  <div class="container">
+    <div class="ranking-head">
+      <h2 class="reveal">Quem mais está indicando</h2>
+      <p class="ranking-note reveal">Ranking dos apoiadores que mais trouxeram gente pra rede — calculado em tempo real a cada indicação.</p>
+    </div>
+    <div id="rankingContainer" class="reveal">
+      <table class="ranking-table" id="rankingTable" style="display:none;">
+        <thead>
+          <tr><th>Posição</th><th>Nome</th><th>Cidade</th><th>Indicações</th></tr>
+        </thead>
+        <tbody id="rankingBody"></tbody>
+      </table>
+      <div class="ranking-empty" id="rankingEmpty">Carregando ranking...</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">Dra. Gabriela &amp; Dani Cunha</div>
+        <p style="max-width:320px;color:var(--tinta-suave);font-size:0.9rem;">Deputada Estadual e Deputada Federal pelo Rio de Janeiro · Rede de apoio oficial da campanha.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <a href="#sobre">Sobre</a>
+        <a href="#propostas">Trajetória</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#ranking">Ranking</a>
+        <a href="#cadastre-se">Cadastre-se</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <p>Cabo Frio, RJ</p>
+        <a href="https://wa.me/5522974026786" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://www.instagram.com/dra.gabrielaoficial" target="_blank" rel="noopener">Instagram (Dra. Gabriela)</a>
+        <a href="https://danicunhario.com.br/" target="_blank" rel="noopener">Site oficial (Dani Cunha)</a>
+        <a href="politica-privacidade.html">Política de Privacidade</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Dra. Gabriela &amp; Dani Cunha · Rede de Apoio</span>
+      <span>Revisar com o jurídico das campanhas antes de publicar</span>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/5522974026786" class="wa-float" aria-label="WhatsApp" target="_blank" rel="noopener">💬</a>
+
+<script>
+  // Mobile menu toggle
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+  // Radio chip group (sexo)
+  document.querySelectorAll('.radio-group').forEach(group => {
+    group.querySelectorAll('.radio-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        group.querySelectorAll('.radio-chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+      });
+    });
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:0.15});
+  revealEls.forEach(el => io.observe(el));
+
+  // ---------- API PRÓPRIA (server.js) ----------
+  // O site conversa direto com o backend Node — não depende mais de Make.com nem Google Sheets.
+  // Caminhos relativos: funcionam em qualquer domínio/porta onde o servidor estiver rodando.
+  const API_BASE = '';
+
+  // ---------- CAPTURA DE INDICAÇÃO (?ref=codigo) ----------
+  const params = new URLSearchParams(window.location.search);
+  const indicadoPor = params.get('ref') || '';
+  if(indicadoPor){
+    document.getElementById('indicadoBanner').classList.add('show');
+  }
+
+  document.getElementById('btnCadastro').addEventListener('click', (e) => {
+    e.preventDefault();
+    const consent = document.getElementById('consent-cadastro');
+    if(!consent.checked){
+      consent.parentElement.style.outline = '2px solid var(--coral)';
+      consent.parentElement.style.borderRadius = '6px';
+      setTimeout(() => { consent.parentElement.style.outline = 'none'; }, 1500);
+      return;
+    }
+
+    const chipSexo = document.querySelector('[data-group="sexo"] .radio-chip.active');
+    const payload = {
+      campanha: 'gabriela-dani-2026',
+      origem: indicadoPor ? 'indicacao' : 'site',
+      subcanal: indicadoPor ? 'link_compartilhado' : 'form_home',
+      nome: document.getElementById('c-nome').value,
+      whatsapp: document.getElementById('c-whatsapp').value,
+      cidade: document.getElementById('c-cidade').value,
+      bairro: document.getElementById('c-bairro').value,
+      aniversario: document.getElementById('c-aniversario').value || null,
+      sexo: chipSexo ? chipSexo.textContent.trim() : null,
+      indicado_por: indicadoPor || null
+    };
+
+    const btn = document.getElementById('btnCadastro');
+    const textoOriginal = btn.textContent;
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    fetch(API_BASE + '/api/cadastro', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    })
+      .then(async (res) => {
+        const dados = await res.json();
+        if(!res.ok) throw new Error(dados.erro || 'Erro ao enviar cadastro.');
+        return dados;
+      })
+      .then(resultado => {
+        const q = new URLSearchParams({ codigo: resultado.codigo || '', link: resultado.link || '' });
+        window.location.href = 'obrigado.html?' + q.toString();
+      })
+      .catch((err) => {
+        btn.textContent = err.message && err.message !== 'Failed to fetch' ? err.message : 'Erro ao enviar — o servidor está rodando?';
+        setTimeout(() => { btn.textContent = textoOriginal; btn.disabled = false; }, 3000);
+      });
+  });
+
+  // ---------- RANKING ----------
+  function renderRanking(rows){
+    const tbody = document.getElementById('rankingBody');
+    const table = document.getElementById('rankingTable');
+    const empty = document.getElementById('rankingEmpty');
+    if(!rows.length){
+      empty.textContent = 'Ainda não há indicações suficientes para montar o ranking.';
+      empty.style.display = 'block';
+      table.style.display = 'none';
+      return;
+    }
+    tbody.innerHTML = '';
+    rows.slice(0,10).forEach((row, i) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td class="ranking-pos">${i+1}º</td><td>${row.nome}</td><td>${row.cidade}</td><td class="ranking-count">${row.indicacoes}</td>`;
+      tbody.appendChild(tr);
+    });
+    table.style.display = 'table';
+    empty.style.display = 'none';
+  }
+
+  fetch(API_BASE + '/api/ranking')
+    .then(res => res.json())
+    .then(renderRanking)
+    .catch(() => {
+      document.getElementById('rankingEmpty').textContent = 'Não foi possível carregar o ranking agora — o servidor está rodando?';
+    });
+
+  // ---------- ESTATÍSTICAS DO HERO (apoiadores/cidades) ----------
+  fetch(API_BASE + '/api/stats')
+    .then(res => res.json())
+    .then(dados => {
+      document.getElementById('statApoiadores').textContent = (dados.total_apoiadores || 0) + '+';
+      document.getElementById('statCidades').textContent = dados.total_cidades || 0;
+    })
+    .catch(() => {
+      document.getElementById('statApoiadores').textContent = '—';
+      document.getElementById('statCidades').textContent = '—';
+    });
+</script>
+
+</body>
+</html>
