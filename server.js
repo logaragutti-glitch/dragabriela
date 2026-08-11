@@ -14,6 +14,10 @@ const db = require('./db');
 const app = express();
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || '';
 
+// O Vercel roda o app atrás de um proxy — sem isso, req.protocol sempre volta "http",
+// mesmo quando o visitante acessou por https (o link de indicação saía errado por causa disso).
+app.set('trust proxy', true);
+
 // ---------- Utilidades ----------
 function slugify(str) {
   return (str || '')
