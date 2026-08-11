@@ -66,4 +66,3 @@ Passo a passo detalhado, com cliques explicados: `PRIMEIROS-PASSOS.md`.
 ## Limitações conhecidas
 
 Documentadas em detalhe em `ARQUITETURA.md`.
-"# dragabriela" 
