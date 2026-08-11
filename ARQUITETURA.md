@@ -1,9 +1,9 @@
-# Arquitetura — Rede de Apoio (Vercel + Supabase)
+# Arquitetura — Rede de Apoio (Vercel + Vercel Postgres)
 
 ```
 Navegador (public/index.html, obrigado.html, politica-privacidade.html)
         │
-        │ POST /api/cadastro   → gera código de indicação, salva no Supabase, responde na hora
+        │ POST /api/cadastro   → gera código de indicação, salva no banco, responde na hora
         │ GET  /api/ranking    → top 10 de quem mais indicou
         │ GET  /api/stats      → total de apoiadores e de cidades
         │
@@ -11,15 +11,15 @@ Navegador (public/index.html, obrigado.html, politica-privacidade.html)
 api/index.js  →  server.js (Express)
         │
         ▼
-   db.js (@supabase/supabase-js, service_role key)
+   db.js (@vercel/postgres, tagged SQL)
         │
         ▼
-  Supabase (Postgres) — tabela "cadastros"
+  Vercel Postgres — tabela "cadastros"
 ```
 
-## Por que Supabase em vez de arquivo local
+## Por que Vercel Postgres em vez de arquivo local
 
-O sistema já rodou com armazenamento em arquivo JSON local — funcionava bem rodando com `npm start` numa máquina/servidor fixo. Mas o Vercel roda o backend como **função serverless**: sem disco persistente, sem garantia de que duas requisições caiam na mesma instância. Um arquivo local nesse ambiente se comporta como memória temporária — pode sumir a qualquer redeploy ou nem persistir entre duas chamadas seguidas. Por isso o armazenamento foi migrado pro Supabase (Postgres gerenciado), que é compartilhado entre todas as instâncias da função.
+O sistema já rodou com armazenamento em arquivo JSON local — funcionava bem numa máquina/servidor fixo. Mas o Vercel roda o backend como **função serverless**: sem disco persistente, sem garantia de que duas requisições caiam na mesma instância. Um arquivo local nesse ambiente se comporta como memória temporária — pode sumir a qualquer redeploy. Por isso o armazenamento foi pro Vercel Postgres (banco gerenciado, embutido no próprio painel do Vercel), compartilhado entre todas as instâncias da função.
 
 ## server.js roda em dois lugares diferentes
 
@@ -30,22 +30,22 @@ O sistema já rodou com armazenamento em arquivo JSON local — funcionava bem r
 
 | Endpoint | Método | O que faz |
 |---|---|---|
-| `/api/cadastro` | POST | Valida campos obrigatórios, gera `codigo_indicacao` único, grava no Supabase, devolve `{ codigo, link }` |
-| `/api/ranking` | GET | Calcula o top 10 de apoiadores por número de indicações, direto do banco |
+| `/api/cadastro` | POST | Valida campos obrigatórios, gera `codigo_indicacao` único, grava no banco, devolve `{ codigo, link }` |
+| `/api/ranking` | GET | Calcula o top 10 de apoiadores por número de indicações (SQL com `JOIN` + `GROUP BY`) |
 | `/api/stats` | GET | Retorna `{ total_apoiadores, total_cidades }` |
 | `/api/export.csv?token=SEU_TOKEN` | GET | Exporta todos os cadastros em CSV — **protegido por `ADMIN_TOKEN`**, uso interno da campanha |
 
 ## Como o código de indicação é gerado
 
-`slugify(nome) + "-" + 4 caracteres aleatórios` (ex: `joao-silva-4f2a`). Antes de gravar, o backend consulta o Supabase pra garantir que esse código ainda não existe (repete a geração até 5 vezes em caso de colisão — extremamente raro).
+`slugify(nome) + "-" + 4 caracteres aleatórios` (ex: `joao-silva-4f2a`). Antes de gravar, o backend consulta o banco pra garantir que esse código ainda não existe (repete a geração até 5 vezes em caso de colisão — extremamente raro).
 
 ## Como o ranking é calculado
 
-Não existe uma coluna "total de indicações" salva. `/api/ranking` busca todos os registros (`nome`, `cidade`, `codigo_indicacao`, `indicado_por`), conta em memória quantos têm `indicado_por` igual a cada código, ordena e devolve os 10 primeiros. Pro volume esperado de uma campanha regional, isso é rápido o bastante sem precisar de uma função SQL dedicada.
+Uma única consulta SQL: `cadastros a JOIN cadastros b ON b.indicado_por = a.codigo_indicacao`, agrupando por apoiador e contando quantas linhas (`b`) apontam pra ele. O banco faz o trabalho pesado — mais rápido e mais simples que buscar tudo e agregar em JavaScript.
 
 ## Segurança dos dados
 
-- A tabela `cadastros` tem **Row Level Security ligado, sem nenhuma policy** — ou seja, só quem tem a `service_role key` (o próprio backend) consegue ler ou escrever. A chave pública do Supabase (`anon key`) **nunca é usada aqui e nunca deve ir pro frontend**.
+- `POSTGRES_URL` é uma string de conexão com usuário/senha embutidos — trate como senha. Nunca vai pro frontend, só existe nas variáveis de ambiente do servidor (local `.env`, ou nas Environment Variables do projeto no Vercel).
 - `/api/export.csv` só funciona com o `ADMIN_TOKEN` correto — sem essa variável configurada, o endpoint fica bloqueado.
 - `indicado_por` só é aceito se corresponder a um `codigo_indicacao` que já existe no banco — não dá pra inflar o ranking com códigos inventados.
 - Rate limit de 5 cadastros/minuto por IP (proteção básica contra spam — em serverless isso é por instância, não é um limite global rígido; para tráfego grande valeria um serviço dedicado de rate limiting).
@@ -53,5 +53,5 @@ Não existe uma coluna "total de indicações" salva. `/api/ranking` busca todos
 ## Limitações conhecidas (honestas)
 
 - **Rate limit não é global**: cada instância serverless tem sua própria memória, então o limite de 5/min é "por instância", não "por IP no mundo todo". Suficiente contra bots simples, não contra um ataque coordenado.
-- **Sem função SQL dedicada pro ranking**: busca todos os registros e agrega em JavaScript. Funciona bem até algumas dezenas de milhares de linhas; se a campanha crescer muito além disso, vale migrar o cálculo pra uma view/RPC do Postgres.
-- **Backup**: o Supabase free tier faz backup automático por um período limitado — para retenção mais longa ou point-in-time recovery, é preciso um plano pago. Enquanto isso, `/api/export.csv` serve como backup manual.
+- **Plano gratuito do Vercel Postgres tem limites de armazenamento e de linhas/consultas** — mais que suficiente pra uma campanha regional, mas vale acompanhar o painel de uso se o volume crescer muito.
+- **Backup**: o Vercel Postgres (Neon por baixo) mantém histórico de mudanças por um período limitado no plano gratuito. `/api/export.csv` serve como backup manual — vale baixar periodicamente.

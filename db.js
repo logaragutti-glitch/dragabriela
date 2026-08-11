@@ -1,96 +1,80 @@
-// Camada de dados — Supabase (Postgres). Substitui o antigo armazenamento em arquivo JSON,
+// Camada de dados — Vercel Postgres. Substitui o antigo armazenamento em arquivo JSON,
 // necessário porque o Vercel roda funções serverless sem disco persistente.
-const { createClient } = require('@supabase/supabase-js');
+const { sql } = require('@vercel/postgres');
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
-
-if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
+if (!process.env.POSTGRES_URL) {
   console.warn(
-    'Aviso: SUPABASE_URL / SUPABASE_SERVICE_KEY não configurados — ' +
-    'o backend não vai conseguir ler nem salvar cadastros até isso ser definido (ver PRIMEIROS-PASSOS.md).'
+    'Aviso: POSTGRES_URL não configurado — o backend não vai conseguir ler nem salvar cadastros até isso ser definido (ver PRIMEIROS-PASSOS.md).'
   );
 }
 
-// service_role key: só usada aqui, no servidor — ignora Row Level Security de propósito,
-// porque é o próprio backend quem decide o que pode ser lido/escrito. Nunca exponha essa
-// chave no frontend.
-const supabase = SUPABASE_URL && SUPABASE_SERVICE_KEY
-  ? createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, { auth: { persistSession: false } })
-  : null;
+function erroBancoNaoConfigurado() {
+  const erro = new Error('Banco de dados não configurado (defina POSTGRES_URL nas variáveis de ambiente).');
+  erro.codigo = 'BANCO_NAO_CONFIGURADO';
+  return erro;
+}
 
-function exigirSupabase() {
-  if (!supabase) {
-    const erro = new Error('Supabase não configurado (defina SUPABASE_URL e SUPABASE_SERVICE_KEY nas variáveis de ambiente).');
-    erro.codigo = 'SUPABASE_NAO_CONFIGURADO';
-    throw erro;
-  }
-  return supabase;
+function exigirBanco() {
+  if (!process.env.POSTGRES_URL) throw erroBancoNaoConfigurado();
 }
 
 async function codigoJaExiste(codigo) {
-  const db = exigirSupabase();
-  const { data, error } = await db.from('cadastros').select('codigo_indicacao').eq('codigo_indicacao', codigo).maybeSingle();
-  if (error) throw error;
-  return !!data;
+  exigirBanco();
+  const { rows } = await sql`select 1 from cadastros where codigo_indicacao = ${codigo} limit 1`;
+  return rows.length > 0;
 }
 
 async function indicadoPorValido(codigo) {
   if (!codigo) return null;
-  const db = exigirSupabase();
-  const { data, error } = await db.from('cadastros').select('codigo_indicacao').eq('codigo_indicacao', codigo).maybeSingle();
-  if (error) throw error;
-  return data ? codigo : null;
+  exigirBanco();
+  const { rows } = await sql`select 1 from cadastros where codigo_indicacao = ${codigo} limit 1`;
+  return rows.length > 0 ? codigo : null;
 }
 
 async function inserirCadastro(registro) {
-  const db = exigirSupabase();
-  const { data, error } = await db.from('cadastros').insert(registro).select().single();
-  if (error) throw error;
-  return data;
+  exigirBanco();
+  const { rows } = await sql`
+    insert into cadastros
+      (nome, whatsapp, cidade, bairro, aniversario, sexo, campanha, origem, subcanal, codigo_indicacao, indicado_por)
+    values
+      (${registro.nome}, ${registro.whatsapp}, ${registro.cidade}, ${registro.bairro}, ${registro.aniversario},
+       ${registro.sexo}, ${registro.campanha}, ${registro.origem}, ${registro.subcanal},
+       ${registro.codigo_indicacao}, ${registro.indicado_por})
+    returning *
+  `;
+  return rows[0];
 }
 
 async function calcularRanking(limite = 10) {
-  const db = exigirSupabase();
-  const { data, error } = await db.from('cadastros').select('nome, cidade, codigo_indicacao, indicado_por');
-  if (error) throw error;
-
-  const porCodigo = new Map(data.map((c) => [c.codigo_indicacao, c]));
-  const contagem = new Map();
-  data.forEach((c) => {
-    if (c.indicado_por) contagem.set(c.indicado_por, (contagem.get(c.indicado_por) || 0) + 1);
-  });
-
-  return [...contagem.entries()]
-    .map(([codigo, indicacoes]) => {
-      const apoiador = porCodigo.get(codigo);
-      return apoiador ? { nome: apoiador.nome, cidade: apoiador.cidade, indicacoes } : null;
-    })
-    .filter(Boolean)
-    .sort((a, b) => b.indicacoes - a.indicacoes)
-    .slice(0, limite);
+  exigirBanco();
+  const { rows } = await sql`
+    select a.nome, a.cidade, count(b.indicado_por)::int as indicacoes
+    from cadastros a
+    join cadastros b on b.indicado_por = a.codigo_indicacao
+    group by a.codigo_indicacao, a.nome, a.cidade
+    order by indicacoes desc
+    limit ${limite}
+  `;
+  return rows;
 }
 
 async function calcularStats() {
-  const db = exigirSupabase();
-  const { count, error: erroCount } = await db.from('cadastros').select('*', { count: 'exact', head: true });
-  if (erroCount) throw erroCount;
-
-  const { data, error: erroCidades } = await db.from('cadastros').select('cidade');
-  if (erroCidades) throw erroCidades;
-  const cidades = new Set(data.map((c) => c.cidade).filter(Boolean));
-
-  return { total_apoiadores: count || 0, total_cidades: cidades.size };
+  exigirBanco();
+  const { rows } = await sql`
+    select count(*)::int as total_apoiadores, count(distinct cidade)::int as total_cidades
+    from cadastros
+  `;
+  return rows[0];
 }
 
 async function listarTodosParaExport() {
-  const db = exigirSupabase();
-  const { data, error } = await db
-    .from('cadastros')
-    .select('nome, whatsapp, cidade, bairro, aniversario, sexo, campanha, origem, subcanal, data_captura, codigo_indicacao, indicado_por')
-    .order('data_captura', { ascending: true });
-  if (error) throw error;
-  return data;
+  exigirBanco();
+  const { rows } = await sql`
+    select nome, whatsapp, cidade, bairro, aniversario, sexo, campanha, origem, subcanal, data_captura, codigo_indicacao, indicado_por
+    from cadastros
+    order by data_captura asc
+  `;
+  return rows;
 }
 
 module.exports = {

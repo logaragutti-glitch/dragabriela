@@ -1,5 +1,5 @@
-// Rede de Apoio — backend (Express + Supabase)
-// Local: npm install && npm start (precisa de SUPABASE_URL e SUPABASE_SERVICE_KEY no ambiente)
+// Rede de Apoio — backend (Express + Vercel Postgres)
+// Local: npm install && npm start (precisa de POSTGRES_URL no ambiente)
 // Vercel: este arquivo é importado por api/index.js como função serverless.
 
 // Carrega variáveis de um arquivo .env quando ele existir (uso local). No Vercel, as variáveis
@@ -103,7 +103,7 @@ app.post('/api/cadastro', async (req, res) => {
     res.json({ codigo, link });
   } catch (err) {
     console.error('Erro ao salvar cadastro:', err);
-    const status = err.codigo === 'SUPABASE_NAO_CONFIGURADO' ? 503 : 500;
+    const status = err.codigo === 'BANCO_NAO_CONFIGURADO' ? 503 : 500;
     res.status(status).json({ erro: 'Erro ao salvar o cadastro. Tente novamente em instantes.' });
   }
 });
@@ -113,7 +113,7 @@ app.get('/api/ranking', async (req, res) => {
     res.json(await db.calcularRanking(10));
   } catch (err) {
     console.error('Erro ao calcular ranking:', err);
-    res.status(err.codigo === 'SUPABASE_NAO_CONFIGURADO' ? 503 : 500).json([]);
+    res.status(err.codigo === 'BANCO_NAO_CONFIGURADO' ? 503 : 500).json([]);
   }
 });
 
@@ -122,7 +122,7 @@ app.get('/api/stats', async (req, res) => {
     res.json(await db.calcularStats());
   } catch (err) {
     console.error('Erro ao calcular estatísticas:', err);
-    res.status(err.codigo === 'SUPABASE_NAO_CONFIGURADO' ? 503 : 500).json({ total_apoiadores: 0, total_cidades: 0 });
+    res.status(err.codigo === 'BANCO_NAO_CONFIGURADO' ? 503 : 500).json({ total_apoiadores: 0, total_cidades: 0 });
   }
 });
 
