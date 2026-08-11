@@ -133,7 +133,8 @@ app.get('/api/stats', async (req, res) => {
 // Exportação em CSV — uso interno da campanha apenas. Protegida por token
 // (defina ADMIN_TOKEN no ambiente). Sem o token configurado, fica desativada.
 app.get('/api/export.csv', async (req, res) => {
-  if (!ADMIN_TOKEN || req.query.token !== ADMIN_TOKEN) {
+  const tokenEnviado = req.query.token || (req.headers.authorization || '').replace(/^Bearer\s+/i, '');
+  if (!ADMIN_TOKEN || tokenEnviado !== ADMIN_TOKEN) {
     return res.status(403).send('Acesso negado.');
   }
   try {
