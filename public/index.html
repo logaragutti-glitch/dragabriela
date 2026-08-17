@@ -582,6 +582,18 @@
   .apoio-resumo-item span{display:block;margin-top:4px;font-family:'IBM Plex Mono',monospace;font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--tinta-suave);}
   .ranking-disclaimer{margin-top:18px;font-size:0.82rem;color:var(--tinta-suave);}
   @media(max-width:600px){.apoio-resumo{grid-template-columns:1fr;}.form-card{padding:28px 22px;}}
+
+  .numero-badge{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:5px 10px;border:1px solid var(--acento-clara);border-radius:100px;font-family:'IBM Plex Mono',monospace;font-size:0.68rem;letter-spacing:0.06em;color:var(--acento-clara);}
+  .propostas-intro{max-width:680px;margin:18px 0 42px;color:var(--tinta-suave);font-size:0.95rem;}
+  .proposta-card .tag-status{display:inline-block;margin-top:16px;color:var(--verde);font-family:'IBM Plex Mono',monospace;font-size:0.68rem;letter-spacing:0.06em;text-transform:uppercase;}
+  .fonte-link{display:inline-block;margin-top:14px;color:var(--verde);font-size:0.78rem;font-weight:600;text-decoration:underline;}
+  .fontes-section{margin-top:58px;padding:30px;background:var(--fundo-escuro);border-radius:14px;}
+  .fontes-section h3{font-size:1.25rem;margin-bottom:10px;}
+  .fontes-section p{max-width:680px;color:var(--tinta-suave);font-size:0.9rem;}
+  .fontes-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:20px;}
+  .fontes-grid a{display:block;padding:14px 16px;background:var(--branco);border:1px solid var(--linha);border-radius:8px;color:var(--tinta);font-size:0.84rem;font-weight:600;transition:transform .2s,box-shadow .2s;}
+  .fontes-grid a:hover{transform:translateY(-2px);box-shadow:var(--sombra);}
+  @media(max-width:600px){.fontes-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -591,7 +603,7 @@
     <div class="logo">Gabriela &amp; Dani <span>rede de apoio</span></div>
     <div class="nav-links">
       <a href="#sobre">Sobre</a>
-      <a href="#propostas">Trajetória</a>
+      <a href="#propostas">Trajetória e propostas</a>
       <a href="#como-funciona">Como funciona</a>
       <a href="#ranking">Ranking</a>
       <a href="#cadastre-se">Cadastre-se</a>
@@ -605,7 +617,7 @@
 
 <nav class="mobile-menu" id="mobileMenu" aria-label="Menu principal" hidden>
   <a href="#sobre">Sobre</a>
-  <a href="#propostas">Trajetória</a>
+  <a href="#propostas">Trajetória e propostas</a>
   <a href="#como-funciona">Como funciona</a>
   <a href="#ranking">Ranking</a>
   <a href="#cadastre-se">Cadastre-se</a>
@@ -641,80 +653,125 @@
         <div class="candidata-topo">
           <img class="candidata-foto" src="img/gabriela-cortes.jpg" alt="Foto de Dra. Gabriela" loading="lazy">
           <div>
-            <div class="cargo">Candidata a Deputada Estadual</div>
+            <div class="cargo">Candidata a Deputada Estadual</div><div class="numero-badge">Número informado: 22122</div>
             <h3>Dra. Gabriela</h3>
           </div>
         </div>
-        <p class="bio" style="margin-top:20px;">Gabriela Maria Gonçalves Azevedo é filha de Vaninha e Sérgio, e irmã de Sérgio Azevedo (o Dr. Serginho, prefeito de Cabo Frio), Filipe e Miguel. É casada com o médico Dr. Illo Rangel. Antes da política, construiu uma carreira de destaque na medicina de alta complexidade e nas iniciativas de saúde pública da Região dos Lagos.</p>
+        <p class="bio" style="margin-top:20px;">Médica cardiologista e hemodinamicista, Dra. Gabriela construiu sua trajetória na saúde e na ciência. A formação e a atuação profissional abaixo são descritas com base em registro legislativo municipal que documenta sua contribuição à saúde pública da Região dos Lagos.</p>
         <div class="candidata-marcos">
-          <div class="candidata-marco"><strong>Pioneirismo em Hemodinâmica</strong><span>4ª mulher no Rio de Janeiro a atuar em cardiologia intervencionista.</span></div>
-          <div class="candidata-marco"><strong>Formação de excelência</strong><span>Medicina pela UFRJ, com especializações em Clínica Médica e Cardiologia, e formação em Hemodinâmica pelo IECAC.</span></div>
-          <div class="candidata-marco"><strong>Reconhecimento científico</strong><span>Premiada em 2024 pela Academia Nacional de Medicina por estudo sobre tratamento da cardiomiopatia hipertrófica.</span></div>
+          <div class="candidata-marco"><strong>Atuação pelo SUS</strong><span>Integra a equipe do Hospital Santa Izabel, onde realiza cateterismo e angioplastia pelo SUS para pacientes de Cabo Frio e da região.</span></div>
+          <div class="candidata-marco"><strong>Formação em saúde</strong><span>Clínica Médica e Cardiologia pela UFRJ, com formação em Hemodinâmica pelo IECAC.</span></div>
+          <div class="candidata-marco"><strong>Ciência e reconhecimento</strong><span>Reconhecida em 2024 por trabalho sobre cardiomiopatia hipertrófica; também recebeu homenagem legislativa por serviços prestados ao município.</span></div>
         </div>
+        <a class="fonte-link" href="https://www.transparencia.cmspa.rj.gov.br/materias/19071" target="_blank" rel="noopener noreferrer">Ver registro legislativo da homenagem →</a>
       </div>
 
       <div class="candidata-card reveal">
         <div class="candidata-topo">
           <img class="candidata-foto" src="img/dani-cunha.jpg" alt="Foto de Dani Cunha" loading="lazy">
           <div>
-            <div class="cargo">Deputada Federal · Candidata à reeleição</div>
+            <div class="cargo">Deputada Federal · Candidata à reeleição</div><div class="numero-badge">Número informado: 2233</div>
             <h3>Dani Cunha</h3>
           </div>
         </div>
-        <p class="bio" style="margin-top:20px;">Danielle Dytz da Cunha nasceu no Rio de Janeiro em 1987. É publicitária formada pela ESPM, com especialização na UC Berkeley e MBA pela ESADE Business School, em Barcelona. Antes da política, teve uma trajetória de empreendedorismo: foi CEO de um fundo de investimentos aos 25 anos e ajudou a criar e mentorar empresas de base tecnológica.</p>
+        <p class="bio" style="margin-top:20px;">Dani Cunha exerce mandato de deputada federal pelo Rio de Janeiro no período 2023–2027. A Câmara dos Deputados registra sua profissão de publicitária, escolaridade de pós-graduação e atuação em órgãos e comissões parlamentares.</p>
         <div class="candidata-marcos">
-          <div class="candidata-marco"><strong>Eleita em 2022</strong><span>75.810 votos pelo Rio de Janeiro, pelo União Brasil.</span></div>
-          <div class="candidata-marco"><strong>Atuação em comissões estratégicas</strong><span>Constituição e Justiça (CCJ), Orçamento, Saúde, e Finanças e Tributação, na Câmara dos Deputados.</span></div>
-          <div class="candidata-marco"><strong>Formação de empreendedores</strong><span>Já mentorou empresas de tecnologia e formou mais de 10 mil alunos em cursos gratuitos de empreendedorismo.</span></div>
+          <div class="candidata-marco"><strong>Eleita em 2022</strong><span>75.810 votos pelo Rio de Janeiro, pelo União Brasil, conforme a comunicação pública do mandato.</span></div>
+          <div class="candidata-marco"><strong>Atuação parlamentar</strong><span>Participação na Secretaria da Mulher e em comissões como Comunicação, Saúde, Constituição e Justiça e Finanças e Tributação.</span></div>
+          <div class="candidata-marco"><strong>Propostas em tramitação</strong><span>Projetos de autoria em saúde, educação, segurança escolar e desenvolvimento econômico, acompanháveis nas fontes oficiais.</span></div>
         </div>
+        <a class="fonte-link" href="https://www.camara.leg.br/deputados/220603/biografia" target="_blank" rel="noopener noreferrer">Ver biografia oficial na Câmara →</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TRAJETÓRIA E REALIZAÇÕES -->
+<!-- TRAJETÓRIA E PROPOSTAS -->
 <section class="propostas" id="propostas">
   <div class="container">
     <div class="propostas-head">
-      <div class="eyebrow">Trajetória e realizações</div>
-      <h2 class="reveal" style="margin-top:14px;">O que cada uma já construiu — e o que vem a seguir.</h2>
+      <div class="eyebrow">Trajetória e propostas</div>
+      <h2 class="reveal" style="margin-top:14px;">Experiência comprovada, atuação pública e propostas acompanháveis.</h2>
+      <p class="propostas-intro reveal">As duas frentes têm competências diferentes. Dra. Gabriela é apresentada a partir da saúde e do desenvolvimento regional; Dani Cunha, a partir do mandato federal e de propostas legislativas que podem ser acompanhadas nas fontes oficiais.</p>
     </div>
 
-    <div class="propostas-subhead">Dra. Gabriela · Deputada Estadual</div>
+    <div class="propostas-subhead">Dra. Gabriela · Saúde e Região dos Lagos</div>
     <div class="propostas-grid">
       <div class="proposta-card reveal">
         <span class="num">01</span>
-        <h3>Atendimento pelo SUS</h3>
-        <p>Integra a equipe do Hospital Santa Izabel, em Cabo Frio, realizando cateterismo e angioplastia via SUS para pacientes do município e de cidades vizinhas.</p>
+        <h3>Atuação pelo SUS</h3>
+        <p>Integra a equipe do Hospital Santa Izabel, realizando cateterismo e angioplastia pelo SUS para pacientes de Cabo Frio e cidades da região.</p>
+        <a class="fonte-link" href="https://www.transparencia.cmspa.rj.gov.br/materias/19071" target="_blank" rel="noopener noreferrer">Fonte legislativa municipal →</a>
       </div>
       <div class="proposta-card reveal">
         <span class="num">02</span>
-        <h3>Faculdade de Medicina em Cabo Frio</h3>
-        <p>Uma das principais idealizadoras da articulação para trazer o curso superior de Medicina à cidade, formando profissionais localmente e fortalecendo o SUS regional.</p>
+        <h3>Formação em cardiologia</h3>
+        <p>Formação em Clínica Médica e Cardiologia pela UFRJ e em Hemodinâmica pelo IECAC, conforme justificativa de homenagem legislativa.</p>
+        <span class="tag-status">Trajetória profissional</span>
       </div>
       <div class="proposta-card reveal">
         <span class="num">03</span>
-        <h3>Medalha Mérito Brigadeiro Lafayette Cantarino Rodrigues de Souza</h3>
-        <p>Homenageada no legislativo regional pela dedicação à saúde e à ciência na Região dos Lagos.</p>
+        <h3>Ciência e reconhecimento</h3>
+        <p>Reconhecimento de 2024 por trabalho sobre cardiomiopatia hipertrófica e homenagem por serviços prestados ao município.</p>
+        <a class="fonte-link" href="https://www.transparencia.cmspa.rj.gov.br/materias/19071" target="_blank" rel="noopener noreferrer">Consultar a matéria →</a>
       </div>
     </div>
 
-    <div class="propostas-subhead">Dani Cunha · Deputada Federal</div>
+    <div class="propostas-subhead">Dani Cunha · Mandato federal</div>
     <div class="propostas-grid">
       <div class="proposta-card reveal">
         <span class="num">01</span>
-        <h3>Eleita em 2022</h3>
-        <p>75.810 votos pelo Rio de Janeiro, pelo União Brasil — hoje busca a reeleição pra Câmara dos Deputados.</p>
+        <h3>75.810 votos em 2022</h3>
+        <p>Mandato de deputada federal pelo Rio de Janeiro no período 2023–2027, com número eleitoral informado pela campanha: 2233.</p>
+        <a class="fonte-link" href="https://www.camara.leg.br/deputados/220603?ano=2023" target="_blank" rel="noopener noreferrer">Acompanhar o mandato →</a>
       </div>
       <div class="proposta-card reveal">
         <span class="num">02</span>
-        <h3>Comissões estratégicas</h3>
-        <p>Atua nas comissões de Constituição e Justiça (CCJ), Orçamento, Saúde, e Finanças e Tributação.</p>
+        <h3>Atuação em comissões</h3>
+        <p>A Câmara registra atuação na Secretaria da Mulher e em comissões como Comunicação, Saúde, Constituição e Justiça e Finanças e Tributação.</p>
+        <a class="fonte-link" href="https://www.camara.leg.br/deputados/220603/biografia" target="_blank" rel="noopener noreferrer">Ver atividades parlamentares →</a>
       </div>
       <div class="proposta-card reveal">
         <span class="num">03</span>
-        <h3>Formação de empreendedores</h3>
-        <p>Publicitária pela ESPM, com passagem pela UC Berkeley e MBA pela ESADE — já formou mais de 10 mil alunos em cursos gratuitos de empreendedorismo.</p>
+        <h3>Projetos acompanháveis</h3>
+        <p>A página oficial reúne propostas de autoria em saúde, educação, segurança escolar, proteção da mulher e desenvolvimento econômico.</p>
+        <a class="fonte-link" href="https://danicunhario.com.br/projetos-de-lei/" target="_blank" rel="noopener noreferrer">Ver projetos no site oficial →</a>
+      </div>
+    </div>
+
+    <div class="propostas-subhead">Propostas em destaque · situação deve ser acompanhada</div>
+    <div class="propostas-grid">
+      <div class="proposta-card reveal">
+        <span class="num">PL 3984/2023</span>
+        <h3>Leitos de UTI em até 24 horas</h3>
+        <p>Proposta para tratar da disponibilização de leitos de UTI em até 24 horas após solicitação médica e da requisição de leitos privados quando necessários.</p>
+        <span class="tag-status">Aguardando parecer · Comissão de Saúde</span>
+        <a class="fonte-link" href="https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2380549" target="_blank" rel="noopener noreferrer">Ver tramitação oficial →</a>
+      </div>
+      <div class="proposta-card reveal">
+        <span class="num">PL 5188/2023</span>
+        <h3>Segurança nas escolas</h3>
+        <p>Proposta para adoção de dispositivos de segurança nos estabelecimentos de ensino, conhecida como “botão do pânico”.</p>
+        <span class="tag-status">Proposta em tramitação</span>
+        <a class="fonte-link" href="https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2399350" target="_blank" rel="noopener noreferrer">Ver tramitação oficial →</a>
+      </div>
+      <div class="proposta-card reveal">
+        <span class="num">PL 1440/2025</span>
+        <h3>Tributação de remessas</h3>
+        <p>Proposta para alterar a tributação simplificada das remessas postais internacionais.</p>
+        <span class="tag-status">Aguardando parecer · CFT</span>
+        <a class="fonte-link" href="https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2494255" target="_blank" rel="noopener noreferrer">Ver tramitação oficial →</a>
+      </div>
+    </div>
+
+    <div class="fontes-section reveal" id="fontes">
+      <h3>Fontes e acompanhamento</h3>
+      <p>Confira as fontes públicas usadas para organizar esta página. Propostas em tramitação podem mudar de status; a equipe deve revisar os links e os textos periodicamente.</p>
+      <div class="fontes-grid">
+        <a href="https://www.camara.leg.br/deputados/220603?ano=2023" target="_blank" rel="noopener noreferrer">Mandato de Dani na Câmara</a>
+        <a href="https://danicunhario.com.br/" target="_blank" rel="noopener noreferrer">Site oficial da Dani Cunha</a>
+        <a href="https://www.transparencia.cmspa.rj.gov.br/materias/19071" target="_blank" rel="noopener noreferrer">Registro legislativo sobre Dra. Gabriela</a>
+        <a href="https://www.instagram.com/dra.gabrielaoficial/" target="_blank" rel="noopener noreferrer">Instagram oficial da Dra. Gabriela</a>
       </div>
     </div>
   </div>
@@ -828,7 +885,7 @@
       <div class="footer-col">
         <h4>Navegação</h4>
         <a href="#sobre">Sobre</a>
-        <a href="#propostas">Trajetória</a>
+        <a href="#propostas">Trajetória e propostas</a>
         <a href="#como-funciona">Como funciona</a>
         <a href="#ranking">Ranking</a>
         <a href="#cadastre-se">Cadastre-se</a>
