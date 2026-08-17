@@ -12,7 +12,9 @@ const crypto = require('crypto');
 const db = require('./db');
 
 const app = express();
+app.disable('x-powered-by');
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || '';
+const PUBLIC_SITE_URL = (process.env.PUBLIC_SITE_URL || '').replace(/\/$/, '');
 
 // O Vercel roda o app atrás de um proxy — sem isso, req.protocol sempre volta "http",
 // mesmo quando o visitante acessou por https (o link de indicação saía errado por causa disso).
@@ -62,7 +64,15 @@ function estaComRateLimit(ip) {
 }
 
 // ---------- Middlewares ----------
-app.use(express.json());
+app.use(express.json({ limit: '16kb' }));
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  if (req.path.startsWith('/api/')) res.setHeader('Cache-Control', 'no-store');
+  next();
+});
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ---------- API ----------
@@ -72,21 +82,24 @@ app.post('/api/cadastro', async (req, res) => {
     return res.status(429).json({ erro: 'Muitos cadastros em pouco tempo. Tente novamente em alguns instantes.' });
   }
 
-  const nome = limpar(req.body.nome, 120);
-  const whatsapp = limpar(req.body.whatsapp, 20).replace(/\D/g, '');
-  const cidade = limpar(req.body.cidade, 80);
-  const bairro = limpar(req.body.bairro, 80);
-  const aniversario = limpar(req.body.aniversario, 10) || null;
-  const sexo = limpar(req.body.sexo, 30) || null;
-  const campanha = limpar(req.body.campanha, 60) || 'geral';
-  const origem = limpar(req.body.origem, 30) || 'site';
-  const subcanal = limpar(req.body.subcanal, 40) || 'form_home';
-  const indicadoPorBruto = limpar(req.body.indicado_por, 60) || null;
+  const body = req.body && typeof req.body === 'object' ? req.body : {};
+  const nome = limpar(body.nome, 120);
+  const whatsapp = limpar(body.whatsapp, 20).replace(/\D/g, '');
+  const cidade = limpar(body.cidade, 80);
+  // Mantidos como valores vazios apenas por compatibilidade com o schema legado.
+  // O formulário público não coleta mais bairro, aniversário ou sexo.
+  const bairro = '';
+  const aniversario = null;
+  const sexo = null;
+  const campanha = limpar(body.campanha, 60) || 'geral';
+  const origem = limpar(body.origem, 30) || 'site';
+  const subcanal = limpar(body.subcanal, 40) || 'form_home';
+  const indicadoPorBruto = limpar(body.indicado_por, 60) || null;
 
-  if (!nome || !whatsapp || !cidade || !bairro) {
-    return res.status(400).json({ erro: 'Preencha nome, WhatsApp, cidade e bairro.' });
+  if (nome.length < 2 || !whatsapp || cidade.length < 2) {
+    return res.status(400).json({ erro: 'Preencha nome, WhatsApp e cidade.' });
   }
-  if (whatsapp.length < 10) {
+  if (whatsapp.length < 10 || whatsapp.length > 13) {
     return res.status(400).json({ erro: 'WhatsApp inválido — inclua DDD.' });
   }
 
@@ -103,7 +116,8 @@ app.post('/api/cadastro', async (req, res) => {
       indicado_por: indicadoPor,
     });
 
-    const link = `${req.protocol}://${req.get('host')}/?ref=${codigo}`;
+    const baseUrl = PUBLIC_SITE_URL || `${req.protocol}://${req.get('host')}`;
+    const link = `${baseUrl}/?ref=${encodeURIComponent(codigo)}`;
     res.json({ codigo, link });
   } catch (err) {
     console.error('Erro ao salvar cadastro:', err);
@@ -112,13 +126,13 @@ app.post('/api/cadastro', async (req, res) => {
   }
 });
 
-app.get('/api/ranking', async (req, res) => {
-  try {
-    res.json(await db.calcularRanking(10));
-  } catch (err) {
-    console.error('Erro ao calcular ranking:', err);
-    res.status(err.codigo === 'BANCO_NAO_CONFIGURADO' ? 503 : 500).json([]);
-  }
+app.get('/api/ranking', (req, res) => {
+  // A versão pública não expõe nomes, cidades ou contagens individuais.
+  // Mantemos a rota para que integrações antigas recebam uma resposta segura.
+  res.status(410).json({
+    publico_desativado: true,
+    mensagem: 'O ranking nominal foi desativado para proteger a privacidade dos apoiadores.',
+  });
 });
 
 app.get('/api/stats', async (req, res) => {
